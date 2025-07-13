@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- header  -->
+    <div id="header-container">
+      <div id="icon">
+        <i class="fa-solid fa-utensils"></i>
+      </div>
+
+      <div id="nav-bar">
+        <ul>
+          <li>Home</li>
+          <li>about</li>
+          <li>contact</li>
+        </ul>
+      </div>
+
+      <div id="button-login">
+        <button>login</button>
+      </div>
+    </div>
+    <br />
+
+    <!-- filter option  -->
+    <div id="container-for-filters">
+      <!-- Difficulty filter   -->
+      <div id="filter-difficulty-container">
+        <select name="" id="add-option">
+          <option value="" selected disabled>Difficulty</option>
+        </select>
+      </div>
+
+      <!-- filter reviews  -->
+      <div id="filter-rating-container">
+        <select name="" id="add-rating">
+          <option selected disabled>Rating</option>
+          <option value="5-5">5 Stars</option>
+          <option value="4.0-4.9">4 Stars & up</option>
+          <option value="3.0-3.9">3 Stars & up</option>
+        </select>
+      </div>
+    </div>
+    <br />
+    <!-- div in which card will be created -->
+    <ul id="show-card"></ul>
+    <script src="./app.js"></script>
+  </body>
+</html>
