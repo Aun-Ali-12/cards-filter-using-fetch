@@ -42,58 +42,55 @@ fetch("https://dummyjson.com/recipes")
         difficulty.push(value.difficulty);
       }
     });
+    let selectedDifficulty = "";
+    let selectedRatingMin = null;
+    let selectedRatingMax = null;
+
     filter.addEventListener("change", function () {
-      let selectedOption = this.options[this.selectedIndex].text;
-      console.log(selectedOption);
-      showCard.innerHTML = "";
-      data.recipes.forEach((value) => {
-        if (selectedOption == value.difficulty) {
-          let li = document.createElement("li");
-          li.innerHTML += `
-      <div id="card">
-        <div><img class="img" src="${value.image}" alt=""></div> 
-        <div id = "content-container">
-        <div id="main-info"> 
-        <h2>${value.name}</h2>
-        <p class="txt">${value.cuisine}</p>
-        <div class="cook-time-and-rating-container"><span class="cook-time"><div class="icon"><i class="fa-regular fa-clock"></i></div><p class="txt">${value.cookTimeMinutes}min</p></span> <span class="rating"><div class="icon star"><i class="fa-solid fa-star"></i></div><p class="txt">${value.rating}</p><p class="txt">(${value.reviewCount})</p></span><p class="txt">${value.difficulty}</p>
-        <span class="rating"></span>
-        </div>
-            </div>
-            </div>
-     </div>  
-      `;
-          showCard.append(li);
-        }
-      });
+      selectedDifficulty = this.value;
+      applyCombinedFilters();
     });
-    //Function for filtering ratings
+
     filterRating.addEventListener("change", function () {
-      let [min, max] = this.value.split("-").map(Number);
-      console.log(min, max);
-      let selectedOption = parseFloat(this.options[this.selectedIndex].value);
-      console.log(selectedOption);
+      [selectedRatingMin, selectedRatingMax] = this.value.split("-").map(Number);
+      applyCombinedFilters();
+    });
+
+    function applyCombinedFilters() {
       showCard.innerHTML = "";
-      // loop which will check the rating and the card will be shown which will get matched with the rating range
       data.recipes.forEach((value) => {
-        if (value.rating >= min && value.rating <= max) {
+        let matchDifficulty = !selectedDifficulty || value.difficulty === selectedDifficulty;
+        let matchRating =
+          selectedRatingMin === null ||
+          (value.rating >= selectedRatingMin && value.rating <= selectedRatingMax);
+
+        if (matchDifficulty && matchRating) {
           let li = document.createElement("li");
           li.innerHTML += `
-      <div id="card">
-        <div><img class="img" src="${value.image}" alt=""></div> 
-        <div id = "content-container">
-        <div id="main-info"> 
-        <h2>${value.name}</h2>
-        <p class="txt">${value.cuisine}</p>
-        <div class="cook-time-and-rating-container"><span class="cook-time"><div class="icon"><i class="fa-regular fa-clock"></i></div><p class="txt">${value.cookTimeMinutes}min</p></span> <span class="rating"><div class="icon star"><i class="fa-solid fa-star"></i></div><p class="txt">${value.rating}</p><p class="txt">(${value.reviewCount})</p></span><p class="txt">${value.difficulty}</p>
-        <span class="rating"></span>
-        </div>
-            </div>
-            </div>
-     </div>  
-      `;
+            <div id="card">
+              <div><img class="img" src="${value.image}" alt=""></div> 
+              <div id="content-container">
+                <div id="main-info"> 
+                  <h2>${value.name}</h2>
+                  <p class="txt">${value.cuisine}</p>
+                  <div class="cook-time-and-rating-container">
+                    <span class="cook-time">
+                      <div class="icon"><i class="fa-regular fa-clock"></i></div>
+                      <p class="txt">${value.cookTimeMinutes}min</p>
+                    </span>
+                    <span class="rating">
+                      <div class="icon star"><i class="fa-solid fa-star"></i></div>
+                      <p class="txt">${value.rating}</p>
+                      <p class="txt">(${value.reviewCount})</p>
+                    </span>
+                    <p class="txt">${value.difficulty}</p>
+                  </div>
+                </div>
+              </div>
+            </div>`;
           showCard.append(li);
         }
       });
-    });
+    }
+
   });
