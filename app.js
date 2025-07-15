@@ -1,96 +1,108 @@
+let url = "https://dummyjson.com/recipes";
 let showCard = document.getElementById("show-card");
-let filter = document.getElementById("add-option");
-let filterRating = document.getElementById("add-rating");
+let allData = [];
 let difficulty = [];
-fetch("https://dummyjson.com/recipes")
-  .then((res) => res.json())
-  .then((data) => {
-    console.log(data);
-    console.log("Recepies", data.recipes);
-    data.recipes.forEach((value) => {
-      //   console.log(value);
-      //   console.log("name", value.name); //name of food
-      //   console.log("cuisine", value.cuisine); //cuisine of food
-      //   console.log("cooktime", value.cookTimeMinutes); //cooktime of food
-      //   console.log("cooktime", value.rating); //rating of food
-      //   console.log("cooktime", value.reviewCount); //reviews of food
-      //   console.log("cooktime", value.tags); //tags of food
-      //   console.log("cooktime", value.difficulty); //difficulty of food
-      //   console.log("cooktime", value.image); ////img link of food
+let selectDifficulty = document.getElementById("add-option");
+let cuisine = [];
+let selectCuisine = document.getElementById("add-cuisine");
+async function fetchApi() {
+  //Fetching api
+  let response = await fetch(url);
+  //Getting response
+  let data = await response.json();
+  console.log(response);
+  console.log(data);
+  allData = data.recipes; //assigning recipes array to our global allData array
+  console.log("all data arr", allData);
+  console.log(data.recipes);
+  console.log(data);
+  console.log(data);
+  console.log(data);
+  //render cards to show on web
+  allData.forEach((value) => {
+    render(value);
+    //adding difficult key into difficulty filter
+    if (!difficulty.includes(value.difficulty)) {
+      difficulty.push(value.difficulty);
+      selectDifficulty.innerHTML += `
+  <option value = "${value.difficulty}">${value.difficulty}</option>
+  `;
+    }
 
-      let li = document.createElement("li");
-      li.innerHTML += `
+    //adding cuisine(region) key into cuisine filter
+    if (!cuisine.includes(value.cuisine)) {
+      cuisine.push(value.cuisine);
+      selectCuisine.innerHTML += `
+  <option value = "${value.cuisine}">${value.cuisine}</option>
+  `;
+    }
+  });
+
+  let selectD = "";
+  let selectC = "";
+  //Executes filtering of difficulty filter
+  selectDifficulty.addEventListener("change", function () {
+    selectD = selectDifficulty.value;
+    console.log(selectD);
+    showCard.innerHTML = ""; //removes all cards
+    combineFilter();
+    // allData.forEach((value) => {
+    //   if (selectD == value.difficulty) {
+    //     return render(value);
+    //   }
+    //   if (selectD == "all") {
+    //     return render(value);
+    //   }
+    // });
+  });
+
+  //Executes filtering of Cuisine filter
+  selectCuisine.addEventListener("change", function () {
+    selectC = selectCuisine.value;
+    console.log(selectC);
+    showCard.innerHTML = ""; //removes all cards
+    combineFilter();
+    // allData.forEach((value) => {
+    //   if (selectC == value.cuisine) {
+    //     return render(value);
+    //   }
+    //   if (selectC == "all") {
+    //     return render(value);
+    //   }
+    // });
+  });
+  //Both filter execution at the same time
+  function combineFilter() {
+    showCard.innerHTML = ""; //removes all cards
+    allData.forEach((value) => {
+      let matchDifficulty = !selectD || value.difficulty == selectD;
+      let matchCuisine = !selectC || value.cuisine == selectC;
+      console.log(matchDifficulty);
+      console.log(matchCuisine);
+      if (matchDifficulty && matchCuisine) {
+        return render(value);
+      }
+    });
+  }
+}
+//render function which will be used to render cards
+function render(element) {
+  let li = document.createElement("li");
+  li.innerHTML += `
       <div id="card">
-        <div><img class="img" src="${value.image}" alt=""></div> 
+        <div><img class="img" src="${element.image}" alt=""></div> 
         <div id = "content-container">
         <div id="main-info"> 
-        <h2>${value.name}</h2>
-        <p class="txt">${value.cuisine}</p>
-        <div class="cook-time-and-rating-container"><span class="cook-time"><div class="icon"><i class="fa-regular fa-clock"></i></div><p class="txt">${value.cookTimeMinutes}min</p></span> <span class="rating"><div class="icon star"><i class="fa-solid fa-star"></i></div><p class="txt">${value.rating}</p><p class="txt">(${value.reviewCount})</p></span><p class="txt">${value.difficulty}</p>
+        <h2>${element.name}</h2>
+        <p class="txt">${element.cuisine}</p>
+        <div class="cook-time-and-rating-container"><span class="cook-time"><div class="icon"><i class="fa-regular fa-clock"></i></div><p class="txt">${element.cookTimeMinutes}min</p></span> <span class="rating"><div class="icon star"><i class="fa-solid fa-star"></i></div><p class="txt">${element.rating}</p><p class="txt">(${element.reviewCount})</p></span><p class="txt">${element.difficulty}</p>
         <span class="rating"></span>
         </div>
             </div>
             </div>
      </div>  
       `;
-      showCard.append(li);
-      //Rendering options in dropdown for difficulty filter
-      if (!difficulty.includes(value.difficulty)) {
-        filter.innerHTML += `
-    <option id="select">${value.difficulty}</option>
-    `;
-        difficulty.push(value.difficulty);
-      }
-    });
-    let selectedDifficulty = "";
-    let selectedRatingMin = null;
-    let selectedRatingMax = null;
+  showCard.append(li);
+}
 
-    filter.addEventListener("change", function () {
-      selectedDifficulty = this.value;
-      applyCombinedFilters();
-    });
-
-    filterRating.addEventListener("change", function () {
-      [selectedRatingMin, selectedRatingMax] = this.value.split("-").map(Number);
-      applyCombinedFilters();
-    });
-
-    function applyCombinedFilters() {
-      showCard.innerHTML = "";
-      data.recipes.forEach((value) => {
-        let matchDifficulty = !selectedDifficulty || value.difficulty === selectedDifficulty;
-        let matchRating =
-          selectedRatingMin === null ||
-          (value.rating >= selectedRatingMin && value.rating <= selectedRatingMax);
-
-        if (matchDifficulty && matchRating) {
-          let li = document.createElement("li");
-          li.innerHTML += `
-            <div id="card">
-              <div><img class="img" src="${value.image}" alt=""></div> 
-              <div id="content-container">
-                <div id="main-info"> 
-                  <h2>${value.name}</h2>
-                  <p class="txt">${value.cuisine}</p>
-                  <div class="cook-time-and-rating-container">
-                    <span class="cook-time">
-                      <div class="icon"><i class="fa-regular fa-clock"></i></div>
-                      <p class="txt">${value.cookTimeMinutes}min</p>
-                    </span>
-                    <span class="rating">
-                      <div class="icon star"><i class="fa-solid fa-star"></i></div>
-                      <p class="txt">${value.rating}</p>
-                      <p class="txt">(${value.reviewCount})</p>
-                    </span>
-                    <p class="txt">${value.difficulty}</p>
-                  </div>
-                </div>
-              </div>
-            </div>`;
-          showCard.append(li);
-        }
-      });
-    }
-
-  });
+fetchApi();
