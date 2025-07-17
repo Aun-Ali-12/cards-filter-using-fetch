@@ -31,23 +31,30 @@
     </div>
     <br />
 
-    <!-- filter option  -->
-    <div id="container-for-filters">
-      
-      <!-- Difficulty filter   -->
-      <div id="filter-difficulty-container">
-        <select name="" id="add-option" class="border-dropdown">
-          <option value="" selected disabled>Difficulty</option>
-          <!-- <option value="all">All</option> -->
-        </select>
-      </div>
+    <!-- parent div to carry all above options  -->
+    <div id="parent-options">
+      <!-- filter option  -->
+      <div id="container-for-filters">
+        <!-- Difficulty filter   -->
+        <div id="filter-difficulty-container">
+          <select name="" id="add-option" class="border-dropdown">
+            <option value="">All</option>
+            <!-- <option value="all">All</option>  -->
+          </select>
+        </div>
 
-      <!-- filter reviews  -->
-      <div id="filter-cuisine-container">
-        <select name="" id="add-cuisine" class="border-dropdown">
-          <option selected disabled>Meal Type</option>
-          <!-- <option value="all">All</option> -->
-        </select>
+        <!-- filter reviews  -->
+        <div id="filter-cuisine-container">
+          <select name="" id="add-cuisine" class="border-dropdown">
+            <option value="">All</option>
+            <!-- <option value="all">All</option> -->
+          </select>
+        </div>
+      </div>
+      <!-- search to see relevant card  -->
+      <div id="search">
+        <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <input type="text" placeholder="Find by search" id="searchBar" />
       </div>
     </div>
     <br />

@@ -134,9 +134,9 @@
   padding-left: 2rem;
   font-size: 1rem;
 }
-.border-dropdown:focus{
-border: 1px solid rgb(253, 4, 178);
-outline: none;
+.border-dropdown:focus {
+  border: 1px solid rgb(253, 4, 178);
+  outline: none;
 }
 #filter-cuisine-container {
   appearance: none;
@@ -145,4 +145,26 @@ outline: none;
   background-size: 1rem 1rem;
   padding-left: 2rem;
   font-size: 1rem;
+}
+
+#parent-options {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+#search {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+#searchBar {
+  width: 15rem;
+  height: 1.6rem;
+  padding: 0.5rem;
+  border: #7b8084 1px solid;
+}
+#searchBar:focus {
+  border: 1px solid rgb(253, 4, 178);
+  outline: none;
+  transition: 0.3s ease-in;
 }

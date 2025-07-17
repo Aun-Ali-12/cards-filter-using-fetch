@@ -5,6 +5,7 @@ let difficulty = [];
 let selectDifficulty = document.getElementById("add-option");
 let cuisine = [];
 let selectCuisine = document.getElementById("add-cuisine");
+let searchBar = document.getElementById("searchBar");
 async function fetchApi() {
   //Fetching api
   let response = await fetch(url);
@@ -38,52 +39,37 @@ async function fetchApi() {
     }
   });
 
-  let selectD = "";
-  let selectC = "";
   //Executes filtering of difficulty filter
-  selectDifficulty.addEventListener("change", function () {
-    selectD = selectDifficulty.value;
-    console.log(selectD);
-    showCard.innerHTML = ""; //removes all cards
-    combineFilter();
-    // allData.forEach((value) => {
-    //   if (selectD == value.difficulty) {
-    //     return render(value);
-    //   }
-    //   if (selectD == "all") {
-    //     return render(value);
-    //   }
-    // });
-  });
+  selectDifficulty.addEventListener("change", combineFilter);
 
   //Executes filtering of Cuisine filter
-  selectCuisine.addEventListener("change", function () {
-    selectC = selectCuisine.value;
-    console.log(selectC);
-    showCard.innerHTML = ""; //removes all cards
-    combineFilter();
-    // allData.forEach((value) => {
-    //   if (selectC == value.cuisine) {
-    //     return render(value);
-    //   }
-    //   if (selectC == "all") {
-    //     return render(value);
-    //   }
-    // });
-  });
+  selectCuisine.addEventListener("change", combineFilter);
   //Both filter execution at the same time
   function combineFilter() {
-    showCard.innerHTML = ""; //removes all cards
-    allData.forEach((value) => {
-      let matchDifficulty = !selectD || value.difficulty == selectD;
-      let matchCuisine = !selectC || value.cuisine == selectC;
-      console.log(matchDifficulty);
-      console.log(matchCuisine);
-      if (matchDifficulty && matchCuisine) {
-        return render(value);
-      }
+    let selectedD = selectDifficulty.value;
+    let selectedC = selectCuisine.value;
+    let filter = allData.filter((value) => {
+      let userDifficulty = selectedD === "" || selectedD === value.difficulty;
+      let userCuisine = selectedC === "" || selectedC === value.cuisine;
+      return userDifficulty && userCuisine;
+    });
+    showCard.innerHTML = "";
+    filter.forEach((value) => {
+      render(value);
     });
   }
+
+  //searching feature:
+  searchBar.addEventListener("keyup", () => {
+    let input = searchBar.value.toLowerCase();
+    showCard.innerHTML = "";
+    allData.forEach((element) => {
+      let recipesName = element.name.toLowerCase();
+      if (recipesName.includes(input)) {
+        render(element);
+      }
+    });
+  });
 }
 //render function which will be used to render cards
 function render(element) {
