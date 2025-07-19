@@ -168,3 +168,8 @@
   outline: none;
   transition: 0.3s ease-in;
 }
+
+/* login btn styling  */
+#button-login > button:hover {
+  cursor: pointer;
+}

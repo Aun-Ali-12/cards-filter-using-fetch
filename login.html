@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="login.css" />
+    <title>Document</title>
+  </head>
+  <body id="login-page-body">
+    <!-- signup form  -->
+    <div id="signup-form">
+      <h2>Create your account</h2>
+      <br />
+      <div id="signup-field">
+        <label for=""
+          >Enter your email: <br /><input
+            type="email"
+            name=""
+            class="border-ouline"
+            id="signup-email"
+            required /></label
+        ><br />
+        <label for=""
+          >Enter your password: <br /><input
+            type="password"
+            name=""
+            class="border-ouline"
+            id="signup-pass"
+            required /></label
+        ><br />
+      </div>
+      <div id="su-parent">
+        <button type="submit" id="btn-su" class="btn-su">signup</button>
+      </div>
+      <br />
+      <p>already have an account? <a href="#" id="signin">signin</a></p>
+    </div>
+
+    <!-- login form  -->
+    <div id="login-form">
+      <h2>Login to your account</h2>
+      <br />
+      <div id="login-field">
+        <label for=""
+          >Enter your email: <br /><input
+            type="email"
+            name=""
+            class="border-ouline"
+            id="signin-email"
+            required /></label
+        ><br />
+        <label for=""
+          >Enter your password: <br /><input
+            type="password"
+            name=""
+            class="border-ouline"
+            id="signin-pass"
+            required /></label
+        ><br />
+      </div>
+      <div id="btn-parent">
+        <button type="submit" id="btn-cancel" class="btn-cancel">go back</button
+        ><br />
+        <button type="submit" id="btn-li" class="btn-login">login</button>
+      </div>
+      <br />
+      <div id="para">
+        <p>haven't created account yet? <a href="#" id="signup">signup</a></p>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>
