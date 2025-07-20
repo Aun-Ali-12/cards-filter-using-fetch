@@ -1,3 +1,9 @@
+// supa base setup
+const supabaseUrl = "https://cpjqfwsuzsjdtyxewurf.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwanFmd3N1enNqZHR5eGV3dXJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI4NjI1NTYsImV4cCI6MjA2ODQzODU1Nn0.lfERtCAQ2IVtx2SrwPUuhx7m9iwywo0bAbNLdXlQHH8";
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
 let url = "https://dummyjson.com/recipes";
 let showCard = document.getElementById("show-card");
 let allData = [];
@@ -15,6 +21,8 @@ let suBtn = document.getElementById("btn-su");
 let liBtn = document.getElementById("btn-li"); //btn to loginto an account in login form
 let cancelBtn = document.getElementById("btn-cancel"); //btn within login form to navigate user to the home page
 let userSuDetails = JSON.parse(localStorage.getItem("userSignup")) || [];
+let suEmail = document.getElementById("signup-email");
+let suPass = document.getElementById("signup-pass");
 
 //Onclick Login btn
 if (loginBtn) {
@@ -38,41 +46,48 @@ if (signupbtn) {
 
 //Account creation logic
 //Creating account or signing up functionality will perform here
-let suPass = document.getElementById("signup-pass");
-if (suPass) {
+async function insertData() {
+  if (suEmail.value.length <= 0 || suPass.value.length <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Input Filed Empty!",
+      text: "Fill all the input fields!",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    return signupForm;
+  }
+  const { data, error } = await supabaseClient
+    .from("user_details")
+    .insert({ user_email: suEmail.value, user_password: suPass.value });
+  if (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Email already exists!",
+      text: "Try another email",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  } else {
+    Swal.fire({
+      icon: "success",
+      title: "Account created successfully!",
+      text: "navigating to login page..",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    loginForm.style.display = "block"; //shows login form to log into account
+    signupForm.style.display = "none"; //hides signup form just as acc will get created
+  }
+}
+
+if (signupForm) {
+  suBtn.addEventListener("click", () => {
+    insertData();
+  });
   suPass.addEventListener("keydown", (event) => {
     if (event.key == "Enter") {
-      let suEmail = document.getElementById("signup-email");
-      let suDetail = {
-        email: suEmail.value,
-        password: suPass.value,
-      };
-      let checkAlreadyDetail = userSuDetails.find(
-        (value) => suEmail.value == value.email
-      );
-      if (checkAlreadyDetail) {
-        console.log(userSuDetails);
-        Swal.fire({
-          icon: "error",
-          title: "Email already exists!",
-          text: "Try another email",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      } else {
-        console.log(userSuDetails);
-        userSuDetails.push(suDetail);
-        localStorage.setItem("userSignup", JSON.stringify(userSuDetails));
-        Swal.fire({
-          icon: "success",
-          title: "Account created successfully!",
-          text: "navigating to login page..",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        loginForm.style.display = "block"; //shows login form to log into account
-        signupForm.style.display = "none"; //hides signup form just as acc will get created
-      }
+      insertData();
     }
   });
 }
@@ -80,32 +95,51 @@ if (suPass) {
 //Login logic
 let checkEmail = document.getElementById("signin-email");
 let checkPass = document.getElementById("signin-pass");
-if (checkPass) {
+async function userLogin() {
+  if (checkEmail.value.length <= 0 || checkPass.value.length <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Input Filed Empty!",
+      text: "Fill all the input fields!",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    return loginForm;
+  }
+  const { data, error } = await supabaseClient
+    .from("user_details")
+    .select()
+    .eq("user_email", checkEmail.value)
+    .eq("user_password", checkPass.value);
+  if (data.length == 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Invalid login details",
+      text: "Check your email or password",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    return loginForm;
+  } else if (data.length > 0) {
+    Swal.fire({
+      icon: "success",
+      title: "Login successfully!",
+      text: "navigating to home page..",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 2000);
+  }
+}
+if (loginForm) {
+  liBtn.addEventListener("click", () => {
+    userLogin();
+  });
   checkPass.addEventListener("keydown", (event) => {
     if (event.key == "Enter") {
-      let checkBoth = userSuDetails.find(
-        (user) =>
-          user.email == checkEmail.value && user.password == checkPass.value
-      );
-      if (checkBoth) {
-        Swal.fire({
-          icon: "success",
-          title: "Login successfull!",
-          text: "navigating to home page..",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 2000);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Incorrect email or password!",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      }
+      userLogin();
     }
   });
 }
@@ -191,9 +225,10 @@ async function fetchApi() {
   });
 }
 //render function which will be used to render cards
-function render(element) {
-  let li = document.createElement("li");
-  li.innerHTML += `
+if (showCard) {
+  function render(element) {
+    let li = document.createElement("li");
+    li.innerHTML += `
       <div id="card">
         <div><img class="img" src="${element.image}" alt=""></div> 
         <div id = "content-container">
@@ -207,7 +242,7 @@ function render(element) {
             </div>
      </div>  
       `;
-  showCard.append(li);
+    showCard.append(li);
+  }
+  fetchApi();
 }
-
-fetchApi();
