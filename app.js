@@ -123,7 +123,7 @@ async function userLogin() {
   } else if (data.length > 0) {
     Swal.fire({
       icon: "success",
-      title: "Login successfully!",
+      title: "Loggedin successfully!",
       text: "navigating to home page..",
       timer: 2000,
       showConfirmButton: false,
