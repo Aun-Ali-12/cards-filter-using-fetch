@@ -64,14 +64,14 @@
 #login-page-body {
   display: flex;
   justify-content: center;
-  margin-top: 20vh;
+  margin-top: 13vh;
 }
 
 /* login form styling  */
 #login-form {
   background-color: rgb(253, 4, 178);
   width: fit-content;
-  height: 25rem;
+  height: 30rem;
   padding: 1.5rem 2rem;
   border-radius: 0.8rem;
   color: #fff;
@@ -94,6 +94,7 @@
   color: #fff;
   font-size: 1rem;
   text-transform: capitalize;
+  border-radius: 0.3rem;
 }
 .btn-login:hover {
   background-color: rgb(1, 184, 1);
@@ -107,6 +108,7 @@
   color: #fff;
   font-size: 1rem;
   text-transform: capitalize;
+  border-radius: 0.3rem;
 }
 .btn-cancel:hover {
   background-color: #6c7074;
@@ -117,4 +119,10 @@
   gap: 1px;
   color: #2702fc;
   text-transform: capitalize;
+}
+
+@media(max-width: 568px){
+ #login-form{
+  margin-top: 10vh;
+ }
 }

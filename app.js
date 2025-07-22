@@ -156,9 +156,9 @@ async function logoutShow() {
     data: { session },
   } = await supabaseClient.auth.getSession();
   if (!session) {
-   if(loginBtn){
-    loginBtn.style.display = "block";
-    logoutBtn.style.display = "none";
+    if (loginBtn) {
+      loginBtn.style.display = "block";
+      logoutBtn.style.display = "none";
     }
   } else {
     loginBtn.style.display = "none";
@@ -167,9 +167,9 @@ async function logoutShow() {
 }
 logoutShow();
 
-//logout logic: 
-if(logoutBtn){
-logoutBtn.addEventListener("click", async () => {
+//logout logic:
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You will be logged out!",
@@ -186,18 +186,46 @@ logoutBtn.addEventListener("click", async () => {
           "Logged Out!",
           "You have been successfully logged out.",
           "success"
-        )
+        );
         logoutBtn.style.display = "none";
         loginBtn.style.display = "block";
       }
     });
-});
+  });
 }
 //onclick signin btn which is within signup form
 if (signinBtn) {
   signinBtn.addEventListener("click", () => {
     signupForm.style.display = "none";
     loginForm.style.display = "block";
+  });
+}
+
+//Google Auth:
+let googleAuth = document.getElementById("btn-GAuth");
+if (googleAuth) {
+  googleAuth.addEventListener("click", async () => {
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+    });
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        text: "Try again",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      return loginForm;
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "Loggedin successfully!",
+        text: "navigating to home page..",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
   });
 }
 
