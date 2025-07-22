@@ -23,7 +23,11 @@ let cancelBtn = document.getElementById("btn-cancel"); //btn within login form t
 let userSuDetails = JSON.parse(localStorage.getItem("userSignup")) || [];
 let suEmail = document.getElementById("signup-email");
 let suPass = document.getElementById("signup-pass");
-
+let logoutBtn = document.getElementById("logout");
+//first hide logout btn
+if (logoutBtn) {
+  logoutBtn.style.display = "none";
+}
 //Onclick Login btn
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
@@ -57,10 +61,11 @@ async function insertData() {
     });
     return signupForm;
   }
-  const { data, error } = await supabaseClient
-    .from("user_details")
-    .insert({ user_email: suEmail.value, user_password: suPass.value });
-  if (error) {
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: suEmail.value,
+    password: suPass.value,
+  });
+  if (error || !data.user) {
     Swal.fire({
       icon: "error",
       title: "Email already exists!",
@@ -68,16 +73,18 @@ async function insertData() {
       timer: 2000,
       showConfirmButton: false,
     });
+    console.error(error);
   } else {
     Swal.fire({
       icon: "success",
-      title: "Account created successfully!",
+      title: "Account created successfully!, check your mail to verify.",
       text: "navigating to login page..",
       timer: 2000,
       showConfirmButton: false,
     });
     loginForm.style.display = "block"; //shows login form to log into account
     signupForm.style.display = "none"; //hides signup form just as acc will get created
+    console.error(error);
   }
 }
 
@@ -106,12 +113,11 @@ async function userLogin() {
     });
     return loginForm;
   }
-  const { data, error } = await supabaseClient
-    .from("user_details")
-    .select()
-    .eq("user_email", checkEmail.value)
-    .eq("user_password", checkPass.value);
-  if (data.length == 0) {
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: checkEmail.value,
+    password: checkPass.value,
+  });
+  if (error) {
     Swal.fire({
       icon: "error",
       title: "Invalid login details",
@@ -120,7 +126,7 @@ async function userLogin() {
       showConfirmButton: false,
     });
     return loginForm;
-  } else if (data.length > 0) {
+  } else {
     Swal.fire({
       icon: "success",
       title: "Loggedin successfully!",
@@ -144,6 +150,49 @@ if (loginForm) {
   });
 }
 
+//logout button show logic:
+async function logoutShow() {
+  const {
+    data: { session },
+  } = await supabaseClient.auth.getSession();
+  if (!session) {
+   if(loginBtn){
+    loginBtn.style.display = "block";
+    logoutBtn.style.display = "none";
+    }
+  } else {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+  }
+}
+logoutShow();
+
+//logout logic: 
+if(logoutBtn){
+logoutBtn.addEventListener("click", async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6", // blue
+      cancelButtonColor: "#d33", // red
+      confirmButtonText: "Yes, logout",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Do your logout logic here
+        const { error } = await supabaseClient.auth.signOut();
+        Swal.fire(
+          "Logged Out!",
+          "You have been successfully logged out.",
+          "success"
+        )
+        logoutBtn.style.display = "none";
+        loginBtn.style.display = "block";
+      }
+    });
+});
+}
 //onclick signin btn which is within signup form
 if (signinBtn) {
   signinBtn.addEventListener("click", () => {

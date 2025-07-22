@@ -29,7 +29,8 @@
 #nav-bar > ul > li:hover {
   cursor: pointer;
 }
-#button-login > button {
+/* login btn styling  */
+#button-login{
   background-color: transparent;
   border: none;
   text-transform: capitalize;
@@ -37,6 +38,23 @@
   margin: 0 1vw 0 0;
   color: #ffff;
   text-decoration: underline;
+}
+#button-login{
+  cursor: pointer;
+}
+
+/* logout btn styling  */
+#logout{
+  background-color: transparent;
+  border: none;
+  text-transform: capitalize;
+  font-size: 1.1rem;
+  margin: 0 1vw 0 0;
+  color: #ffff;
+  text-decoration: underline;
+}
+#logout:hover{
+  cursor: pointer;
 }
 #show-card {
   display: flex;
@@ -158,18 +176,47 @@
   gap: 0.3rem;
 }
 #searchBar {
-  width: 15rem;
+  width: 20rem;
   height: 1.6rem;
   padding: 0.5rem;
   border: #7b8084 1px solid;
+  border-radius: 0.2rem;
 }
 #searchBar:focus {
   border: 1px solid rgb(253, 4, 178);
   outline: none;
   transition: 0.3s ease-in;
 }
-
-/* login btn styling  */
-#button-login > button:hover {
+#ham-burger{
+  display: none;
+  color: #ffff;
+}
+#ham-burder:hover{
   cursor: pointer;
+}
+/**Media query for mobile view*/
+@media(max-width: 908px){
+#parent-options{
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+#parent-options>#search{
+padding-left: 0.5rem;
+}
+#searchBar{
+  width: 64vw;
+}
+}
+
+@media(max-width: 568px){
+  #icon,  #nav-bar{
+    display: none;
+  }
+  #ham-burger{
+    display: block;
+  }
+  #header-container>div{
+    margin: 1rem; 
+  }
 }
