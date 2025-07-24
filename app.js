@@ -207,6 +207,9 @@ if (googleAuth) {
   googleAuth.addEventListener("click", async () => {
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
+      options: {
+      redirectTo: 'https://aun-ali-12.github.io/cards-filter-using-fetch/' // ⚠️ Update to your dashboard page
+    }
     });
     if (error) {
       Swal.fire({
@@ -217,14 +220,6 @@ if (googleAuth) {
         showConfirmButton: false,
       });
       return loginForm;
-    } else {
-      Swal.fire({
-        icon: "success",
-        title: "Loggedin successfully!",
-        text: "navigating to home page..",
-        timer: 2000,
-        showConfirmButton: false,
-      });
     }
   });
 }
